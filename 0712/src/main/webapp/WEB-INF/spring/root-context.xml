@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	
+	<!-- 아파치의 dbcp 라이브러리가 제공하는 BasicDataSource를 생성한다. -->
+	<bean id="ds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"> <!-- id는 참조를 하기 위해 존재 O -->
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/my_db"/>
+		<property name="username" value="test"/>
+		<property name="password" value="1111"/>
+		
+		<!-- 동시에 사용할 수 있는 최대 커넥션 수 -->
+		<property name="maxActive" value="20"/>
+		
+		<!-- 커넥션 풀에 반납할 때 최대로 유지되는 커넥션 수 -->
+		<property name="maxIdle" value="10"/>
+		
+		<!-- 커넥션 풀에 반납할 때 최소로 유지되는 커넥션 수 -->
+		<property name="minIdle" value="10"/>
+	</bean>
+	
+	<!-- mybatis-spring 라이브러리가 가지는 FactoryBean 객체 생성 (이 객체는 DataSource가 있어야 생성 가능) -->
+	<bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 앞서 생성된 DataSource를 현재 객체의 dataSource라는 멤버변수에 저장해야 한다. -->
+		<property name="dataSource" ref="ds"/>
+		
+		<!-- mapper들(emp.xml ...)의 위치를 지정하자 -->
+		<property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
+	</bean>
+	
+	<!-- factory를 통해 SqlSession과 같은 객체 생성 (SqlSession이 기본 생성자를 만들지 못하므로 constructor-arg를 통해 factory를 참조해서 객체 생성) -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="factory"/>
+	</bean>
+	
+	<!-- 필요한 DAO들 정의 -->
+	<context:component-scan base-package="mybatis.dao"/>
+</beans>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	
+	<!-- dbcp라이브러리가 가지고 있는 BasicDataSource를 생성 -->
+	<bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="ds">
+		<!-- BasicDataSource객체 안에 멤버변수들 초기화 -->
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/my_db"/>
+		<property name="username" value="test"/>
+		<property name="password" value="1111"/>
+		
+		<!-- 최대 동시 커넥션 수 -->
+		<property name="maxActive" value="20"/>
+		<!-- 커넥션 반납 시 최대 커넥션 유지 수 -->
+		<property name="maxIdle" value="10"/>
+		<!-- 커넥션 반납 시 최소 커넥션 유지 수 -->
+		<property name="minIdle" value="5"/>
+	</bean>
+	
+	<!-- mybatis spring에 있는 Factory 생성 (이 때 위의 ds를 참조해야 함) -->
+	<bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="ds"/>
+		
+		<!-- 맵퍼들의 위치 설정 (참고로 .은 java파일일 때 쓰는 것이므로 xml파일에서는 /를 써야 함) -->
+		<property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"></property>
+	</bean>
+	
+	<!-- 위의 factory를 통해 SqlSession 생성 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="factory"/>
+	</bean>
+	
+	<!-- 필요한 DAO들 -->
+	<context:component-scan base-package="mybatis.dao"/>
+	
+</beans>

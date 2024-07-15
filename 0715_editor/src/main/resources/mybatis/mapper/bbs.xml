@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bbs">
+	
+	<resultMap type="mybatis.vo.BbsVO" id="map1">
+		<!-- 아래 select문이 수행되면 나오는 결과 하나씩 넘어와서 BbsVO를 만듬 (c_list는 넘어오지 않으므로 따로 설정) -->
+		<!-- 기본키 설정 -->
+		<id property="b_idx" column="b_idx"/>
+		<collection property="c_list" ofType="mybatis.vo.CommVO" select="comm.comm_list" column="b_idx"/>
+	</resultMap>
+	
+	<!-- 해당 게시물의 전체 게시물 수를 반환 -->
+	<select id="count" resultType="int" parameterType="String">
+		SELECT COUNT(*) FROM bbs_t
+		WHERE status = 0 AND bname = #{bname}
+	</select>
+	
+	<!-- 게시물 목록을 만들기 위한 select -->
+	<!-- MySQL에서 페이징 기법을 쓰려면 아래 방식대로 해야 한다. -->
+	<select id="list" resultMap="map1" parameterType="Map">
+		SELECT * FROM(
+			SELECT @RN:=@RN+1 AS rnum, a.* FROM(
+				SELECT * FROM bbs_t
+				WHERE status = 0 AND bname = #{bname}
+				ORDER BY b_idx DESC
+			) a, (select @RN:=0) b
+		) c WHERE c.rnum BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 원글저장 -->
+	<insert id="add" parameterType="Map">
+		INSERT INTO bbs_t(subject, writer, content, file_name, ori_name, write_date, ip, hit, bname, status)
+		VALUES (#{subject}, #{writer}, #{content}, #{file_name}, #{ori_name}, NOW(), #{ip}, 0, #{bname2}, 0)
+	</insert>
+	
+	<!-- 원글보기 -->
+	<select id="getBbs" parameterType="String" resultMap="map1">
+		SELECT * FROM bbs_t
+		WHERE b_idx = #{num}
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="hit" parameterType="String">
+		UPDATE bbs_t
+		SET hit = hit + 1
+		WHERE b_idx = #{b_idx}
+	</update>
+	
+	<!-- 원글 수정 -->
+	<update id="edit" parameterType="Map">
+		UPDATE bbs_t
+		<trim prefix="SET" suffixOverrides=",">
+			subject = #{subject},
+			content = #{content}, <!-- if문을 수행하지 않을 때 ,로 끝나므로 suffixOverrides로 ,제거 -->
+			<if test="fname != null">
+				file_name = #{fname},
+				ori_name = #{oname}
+			</if>
+		</trim>
+		WHERE b_idx = #{b_idx}
+	</update>
+	
+	<!-- 원글 삭제(status를 1로 변경) -->
+	<update id="del" parameterType="String">
+		Update bbs_t
+		SET status = 1
+		WHERE b_idx = #{b_idx}
+	</update>
+
+</mapper>

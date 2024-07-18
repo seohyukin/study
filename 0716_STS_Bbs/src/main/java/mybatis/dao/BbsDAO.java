@@ -66,14 +66,8 @@ public class BbsDAO {
 	
 	//원글 삭제 메서드
 	public int del(String b_idx) {
-		int cnt = ss.update("bbs.del", b_idx);
-		if (cnt > 0) {
-			ss.commit();
-		} else {
-			ss.rollback();
-		}
-		
-		return cnt;
+
+		return ss.update("bbs.del", b_idx);
 	}
 	
 	//댓글 저장 메서드

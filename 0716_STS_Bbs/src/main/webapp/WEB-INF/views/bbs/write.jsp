@@ -108,6 +108,7 @@
 	});
 	
 	function sendImage(file, editor) {
+		//파일을 첨부해서 비동기식으로 보낼 때 FormData를 활용하는 것
 		let ff = new FormData();
 		
 		//전송하고자 하는 이미지 파일을 파라미터로 설정

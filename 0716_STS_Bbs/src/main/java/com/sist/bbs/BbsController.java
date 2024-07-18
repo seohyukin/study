@@ -273,6 +273,18 @@ public class BbsController {
 		}
 		return mv;
 	}
+	
+	@RequestMapping(value = "del", method = RequestMethod.POST)
+	public ModelAndView del(BbsVO vo) {
+		ModelAndView mv = new ModelAndView();
+		
+		b_dao.del(vo.getB_idx());
+		
+		//list.jsp로 가는 게 아니라 BbsController 위에 있는 list함수를 수행한다.
+		mv.setViewName("redirect:/list?bname=" + vo.getBname());
+		
+		return mv;
+	}
 
 }
 

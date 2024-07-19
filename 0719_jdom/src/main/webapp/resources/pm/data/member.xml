@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<members>
+	<member>
+		<name>마루치</name>
+		<email>maru@korea.com</email>
+		<phone>01011111111</phone>
+	</member>
+	<member>
+		<name>손흥민</name>
+		<email>son@korea.com</email>
+		<phone>01022222222</phone>
+	</member>
+	<member>
+		<name>이도</name>
+		<email>lee@korea.com</email>
+		<phone>01033333333</phone>
+	</member>
+	<member>
+		<name>홍길동</name>
+		<email>hong@korea.com</email>
+		<phone>01044444444</phone>
+	</member>
+</members>

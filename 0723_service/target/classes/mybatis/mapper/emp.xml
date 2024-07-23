@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="emp">
+	<select id="total" resultType="mybatis.vo.EmpVO">
+		SELECT * FROM emp
+	</select>
+	
+	<!-- 
+		동적 쿼리 : searchType이 0일 때 사번 검색
+				 searchType이 1일 때 이름 검색
+				 searchType이 2일 때 직종 검색
+				 searchType이 3일 때 부서번호 검색
+	 -->
+	<select id="search" parameterType="map" resultType="mybatis.vo.EmpVO">
+		SELECT * FROM emp
+		<trim prefix="WHERE">
+			<if test="searchType != null and searchType == 0"> <!-- 이 조건에 만족하면 where절이 살아나고 만족하지 않으면 where절이 trim당한다 -->
+				empno = #{searchValue}
+			</if>
+			<if test="searchType != null and searchType == 1">
+				ename LIKE CONCAT('%', #{searchValue}, '%')
+			</if>
+			<if test="searchType != null and searchType == 2">
+				job LIKE CONCAT('%', #{searchValue}, '%')
+			</if>
+			<if test="searchType != null and searchType == 3">
+				deptno = #{searchValue}
+			</if>
+		</trim>
+		<!-- <where>
+			<choose>
+				<when test="searchType == 0">
+					empno = #{searchValue}
+				</when>
+				<when test="searchType == 1">
+					ename LIKE CONCAT('%', #{searchValue}, '%')
+				</when>
+				<when test="searchType == 2">
+					job LIKE CONCAT('%', #{searchValue}, '%')
+				</when>
+				<when test="searchType == 3">
+					deptno = #{searchValue}
+				</when>
+			</choose>
+		</where> -->
+	</select>
+</mapper>

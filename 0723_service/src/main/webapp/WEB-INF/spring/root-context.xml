@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	
+	<!-- 아래에 나오는 bean객체에서 내부적으로 annotation을 쓰는 것을 적극 지원 -->
+	<context:annotation-config/>
+		
+	<!-- jdbc.properties파일을 로드하기 위해 context라는 네임스페이스와 스키마 객체를 위에 beans에서 선언했다. -->
+	<context:property-placeholder location="classpath:mybatis/props/jdbc.properties"/>
+	
+	<!-- dbcp라이브러리가 가지고 있는 BasicDataSource를 생성 -->
+	<bean id="ds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<!-- BasicDataSource객체 안에 멤버변수들 초기화 -->
+		<property name="driverClassName" value="${jdbc.driver}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.user}"/>
+		<property name="password" value="${jdbc.pwd}"/>
+		
+		<!-- 최대 동시 커넥션 수 -->
+		<property name="maxActive" value="${jdbc.maxActive}"/>
+		<!-- 커넥션 반납 시 최대 커넥션 유지 수 -->
+		<property name="maxIdle" value="${jdbc.maxIdle}"/>
+		<!-- 커넥션 반납 시 최소 커넥션 유지 수 -->
+		<property name="minIdle" value="${jdbc.minIdle}"/>
+	</bean>
+	
+	<!-- mybatis spring에 있는 Factory 생성 (이 때 위의 ds를 참조해야 함) -->
+	<bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="ds"/>
+		
+		<!-- 맵퍼들의 위치 설정 (참고로 .은 java파일일 때 쓰는 것이므로 xml파일에서는 /를 써야 함) -->
+		<property name="mapperLocations" value="classpath:mybatis/mapper/**/*.xml"></property>
+	</bean>
+	
+	<!-- 위의 factory를 통해 SqlSession 생성 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="factory"/>
+	</bean>
+	
+	<!-- 필요한 DAO들 (@Component 필수) -->
+	<context:component-scan base-package="mybatis.dao"/>
+	
+</beans>

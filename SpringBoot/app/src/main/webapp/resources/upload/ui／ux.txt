@@ -1,0 +1,69 @@
+index.jsp
+
+[user]
+- main.jsp
+   - header.jsp
+      - header_right.jsp
+      - category.jsp
+   - side.jsp
+   - footer.jsp
+
+- product.jsp
+   - product_page.jsp
+   - product_detail.jsp
+
+- board.jsp
+   - bbs.jsp
+      - list.jsp
+      - write.jsp
+      - view.jsp
+      - edit.jsp (작성자만)
+   - notice.jsp
+      - list.jsp
+      - view.jsp
+   
+- signup.jsp
+- signin.jsp
+
+- orderlist.jsp
+- cart.jsp
+- checkout.jsp
+   - coupon_use.jsp
+
+- mypage.jsp
+   - (orderlist.jsp)
+   - user_edit.jsp
+   - mile_list.jsp (팝업)
+   - coupon_list.jsp (팝업)
+
+- brand.jsp
+
+[admin]
+- (signin.jsp) = user
+
+- (product.jsp) = user + CRUD
+   - product_page.jsp
+     - add.jsp
+   - product_detail.jsp + summernote
+     - edit.jsp
+
+- board.jsp
+   - bbs.jsp + 관리자만 삭제 가능
+      - list.jsp
+      - write.jsp
+      - view.jsp
+      - edit.jsp
+   - notice.jsp + 관리자만 작성, 수정, 삭제 가능
+      - list.jsp
+      - write.jsp
+      - view.jsp
+      - edit.jsp
+
+- dashboard.jsp
+
+- mypage.jsp + 관리자 추가 탭
+   - user_manage.jsp
+   - order_manage.jsp
+
+
+

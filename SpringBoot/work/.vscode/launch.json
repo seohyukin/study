@@ -1,0 +1,54 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Ex0725DbApplication<ex0725_db>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.sist.ex0725_db.Ex0725DbApplication",
+            "projectName": "ex0725_db",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SecurityApplication<security>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.sist.security.SecurityApplication",
+            "projectName": "security",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-AppApplication<app>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.sist.app.AppApplication",
+            "projectName": "app",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-JpaEx1Application<jpa_ex1>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.sist.jpa_ex1.JpaEx1Application",
+            "projectName": "jpa_ex1",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-JpaEx2Application<jpa_ex2>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.sist.jpa_ex2.JpaEx2Application",
+            "projectName": "jpa_ex2",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

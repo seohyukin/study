@@ -1,7 +1,0 @@
-[xml 파싱]
-
-document 객체 얻기
-sax빌더로 받아야 함 (default생성자로 인자 없이)
-
-root 얻기
-root의 자식 얻기
